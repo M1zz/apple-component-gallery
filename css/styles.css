@@ -366,7 +366,7 @@ body {
 
 /* ── Component Card ── */
 .comp-card {
-  background: var(--surface);
+  background: #ffffff;
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 14px 16px;
