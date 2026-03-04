@@ -12,7 +12,18 @@ function App() {
   const [plat, setPlat] = useState("All");
   const [selected, setSelected] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [dark, setDark] = useState(() => localStorage.getItem("theme") === "dark");
   const detailRef = useRef(null);
+
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [dark]);
 
   /* ── Filtering ── */
   const filtered = useMemo(() =>
@@ -81,19 +92,28 @@ function App() {
               </div>
             </div>
 
-            <div className="search-box">
-              <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
-                <circle cx="9" cy="9" r="6.5" stroke="#6e6e73" strokeWidth="1.5" />
-                <line x1="13.5" y1="13.5" x2="18" y2="18" stroke="#6e6e73" strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-              <input
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="Search components... (⌘K)"
-              />
-              {search && (
-                <button className="search-clear" onClick={() => setSearch("")}>✕</button>
-              )}
+            <div style={{ display:"flex", alignItems:"center", gap:"8px", flexShrink:0 }}>
+              <div className="search-box">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+                  <circle cx="9" cy="9" r="6.5" stroke="#6e6e73" strokeWidth="1.5" />
+                  <line x1="13.5" y1="13.5" x2="18" y2="18" stroke="#6e6e73" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+                <input
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="Search components... (⌘K)"
+                />
+                {search && (
+                  <button className="search-clear" onClick={() => setSearch("")}>✕</button>
+                )}
+              </div>
+              <button
+                className="theme-toggle"
+                onClick={() => setDark(d => !d)}
+                title={dark ? "라이트 모드로 전환" : "다크 모드로 전환"}
+              >
+                {dark ? "☀️" : "🌙"}
+              </button>
             </div>
           </div>
 
