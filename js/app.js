@@ -81,11 +81,22 @@ function App() {
   const comp = COMPONENTS.find(c => c.id === selected);
 
   const catCounts = useMemo(() => {
+    const base = COMPONENTS.filter(c => {
+      const q = search.toLowerCase();
+      const matchSearch = !q ||
+        c.name.toLowerCase().includes(q) ||
+        c.swiftUI.toLowerCase().includes(q) ||
+        c.uiKit.toLowerCase().includes(q) ||
+        c.aliases.some(a => a.toLowerCase().includes(q)) ||
+        c.desc.includes(search);
+      const matchPlat = plat === "All" || c.plat.includes(plat);
+      return matchSearch && matchPlat;
+    });
     const counts = {};
-    CATEGORIES.forEach(c => counts[c] = c === "All" ? filtered.length : 0);
-    filtered.forEach(c => { if (counts[c.cat] !== undefined) counts[c.cat]++; });
+    CATEGORIES.forEach(c => counts[c] = c === "All" ? base.length : 0);
+    base.forEach(c => { if (counts[c.cat] !== undefined) counts[c.cat]++; });
     return counts;
-  }, [filtered]);
+  }, [search, plat]);
 
   /* ── Effects ── */
   useEffect(() => {
