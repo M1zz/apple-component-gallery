@@ -5,7 +5,7 @@
 
 const { useState, useMemo, useRef, useEffect, useCallback } = React;
 
-function DonationButton() {
+function DonationButton({ t }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -19,31 +19,32 @@ function DonationButton() {
       <button
         className="donation-fab"
         onClick={() => setOpen(true)}
-        title="후원하기"
+        title={t("donationFab")}
       >
-        ☕ 후원
+        ☕ {t("donationFab")}
       </button>
 
       {open && (
         <div className="donation-overlay" onClick={() => setOpen(false)}>
           <div className="donation-modal" onClick={e => e.stopPropagation()}>
             <button className="donation-close" onClick={() => setOpen(false)}>✕</button>
-            <p className="donation-title">후원해주시면 감사해요 😊</p>
+            <p className="donation-title">{t("donationTitle")}</p>
             <img
               src="assets/kakao-pay-qr.jpg"
               alt="카카오페이 QR 코드"
               className="donation-qr"
             />
-            <p className="donation-name">카카오페이 · 이현호</p>
+            <p className="donation-name">{t("donationName")}</p>
           </div>
         </div>
       )}
     </>
   );
 }
+
 const { COMPONENTS, CATEGORIES, PLATFORMS, CAT_COLORS, PLAT_ICONS } = window.APP_DATA;
 
-function App() {
+function App({ lang, changeLang, t, getDesc }) {
   const [search, setSearch] = useState("");
   const [cat, setCat] = useState("All");
   const [plat, setPlat] = useState("All");
@@ -136,7 +137,7 @@ function App() {
               <div className="logo-icon">⌘</div>
               <div className="logo-text">
                 <h1>Apple Component Gallery</h1>
-                <p>{COMPONENTS.length}개 컴포넌트 · SwiftUI & UIKit</p>
+                <p>{t("componentCount", COMPONENTS.length)}</p>
               </div>
             </div>
 
@@ -149,16 +150,29 @@ function App() {
                 <input
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  placeholder="Search components... (⌘K)"
+                  placeholder={t("searchPlaceholder")}
                 />
                 {search && (
                   <button className="search-clear" onClick={() => setSearch("")}>✕</button>
                 )}
               </div>
+
+              <div className="lang-switcher">
+                {["ko", "en", "ja", "zh"].map(l => (
+                  <button
+                    key={l}
+                    className={`lang-btn ${lang === l ? "active" : ""}`}
+                    onClick={() => changeLang(l)}
+                  >
+                    {l === "ko" ? "한" : l === "en" ? "EN" : l === "ja" ? "日" : "中"}
+                  </button>
+                ))}
+              </div>
+
               <button
                 className="theme-toggle"
                 onClick={() => setDark(d => !d)}
-                title={dark ? "라이트 모드로 전환" : "다크 모드로 전환"}
+                title={dark ? t("lightMode") : t("darkMode")}
               >
                 {dark ? "☀️" : "🌙"}
               </button>
@@ -221,7 +235,7 @@ function App() {
                   >
                     {c.swiftUI}
                   </div>
-                  <p className="card-desc">{c.desc}</p>
+                  <p className="card-desc">{getDesc(c)}</p>
                   <div className="card-tags">
                     {c.plat.map(p => (
                       <span key={p} className="tag-plat">{PLAT_ICONS[p]} {p}</span>
@@ -234,9 +248,9 @@ function App() {
           ) : (
             <div className="empty-state">
               <div className="icon">🔍</div>
-              <p className="title">검색 결과가 없습니다</p>
-              <p className="subtitle">다른 키워드로 검색해보세요</p>
-              <button className="reset-btn" onClick={resetFilters}>필터 초기화</button>
+              <p className="title">{t("noResults")}</p>
+              <p className="subtitle">{t("noResultsHint")}</p>
+              <button className="reset-btn" onClick={resetFilters}>{t("resetFilters")}</button>
             </div>
           )}
         </div>
@@ -266,12 +280,12 @@ function App() {
               </div>
 
               {/* Description */}
-              <p className="detail-desc">{comp.desc}</p>
+              <p className="detail-desc">{getDesc(comp)}</p>
 
               {/* Preview */}
               {window.PREVIEWS?.[comp.id] && (
                 <div style={{ marginBottom: 24 }}>
-                  <div className="section-label">Preview</div>
+                  <div className="section-label">{t("preview")}</div>
                   <div
                     className="component-preview"
                     dangerouslySetInnerHTML={{ __html: window.PREVIEWS[comp.id] }}
@@ -294,7 +308,7 @@ function App() {
               {/* Aliases */}
               {comp.aliases.length > 0 && (
                 <div style={{ marginBottom: 24 }}>
-                  <div className="section-label">Also known as</div>
+                  <div className="section-label">{t("alsoKnownAs")}</div>
                   <div style={{ display:"flex", gap:5, flexWrap:"wrap" }}>
                     {comp.aliases.map(a => (
                       <span key={a} className="alias-tag">{a}</span>
@@ -305,7 +319,7 @@ function App() {
 
               {/* Platforms */}
               <div style={{ marginBottom: 24 }}>
-                <div className="section-label">Platforms</div>
+                <div className="section-label">{t("platforms")}</div>
                 <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
                   {comp.plat.map(p => (
                     <span key={p} className="plat-tag">{PLAT_ICONS[p]} {p}</span>
@@ -317,12 +331,12 @@ function App() {
               {/* Code */}
               <div>
                 <div className="code-header">
-                  <div className="section-label" style={{ marginBottom: 0 }}>Code Example</div>
+                  <div className="section-label" style={{ marginBottom: 0 }}>{t("codeExample")}</div>
                   <button
                     className={`copy-btn ${copied ? "copied" : ""}`}
                     onClick={() => copyCode(comp.code)}
                   >
-                    {copied ? "✓ Copied!" : "Copy"}
+                    {copied ? t("copied") : t("copy")}
                   </button>
                 </div>
                 <pre
@@ -342,7 +356,7 @@ function App() {
                 ].filter(r => r.value);
                 return (
                   <div style={{ marginTop: 24, marginBottom: 24 }}>
-                    <div className="section-label">다른 플랫폼에서의 이름</div>
+                    <div className="section-label">{t("otherPlatforms")}</div>
                     <div className="cross-platform-table">
                       {rows.map(r => (
                         <div key={r.label} className="cp-row">
@@ -361,7 +375,7 @@ function App() {
               {/* References */}
               {window.REFERENCES?.[comp.id]?.length > 0 && (
                 <div style={{ marginTop: 24 }}>
-                  <div className="section-label">Apple Developer Documentation</div>
+                  <div className="section-label">{t("appleDocs")}</div>
                   <div className="ref-list">
                     {window.REFERENCES[comp.id].map(ref => (
                       <a
@@ -394,9 +408,9 @@ function App() {
       <footer className="footer">
         <div className="footer-inner">
           <span>
-            Inspired by <a href="https://component.gallery" target="_blank" rel="noopener">component.gallery</a> · Apple 플랫폼용으로 재구성
+            Inspired by <a href="https://component.gallery" target="_blank" rel="noopener">component.gallery</a> · {t("footerRemix")}
           </span>
-          <span>Made for iOS / macOS / watchOS / tvOS developers</span>
+          <span>{t("footerFor")}</span>
         </div>
       </footer>
 
@@ -405,10 +419,29 @@ function App() {
 }
 
 function Root() {
+  const [lang, setLang] = useState(() => localStorage.getItem("lang") || "ko");
+
+  const changeLang = useCallback((l) => {
+    setLang(l);
+    localStorage.setItem("lang", l);
+  }, []);
+
+  const t = useCallback((key, ...args) => {
+    const strings = window.I18N_STRINGS?.[lang] || window.I18N_STRINGS?.["ko"];
+    const val = strings?.[key];
+    if (typeof val === "function") return val(...args);
+    return val ?? key;
+  }, [lang]);
+
+  const getDesc = useCallback((comp) => {
+    if (lang === "ko") return comp.desc;
+    return window.I18N_DESC?.[lang]?.[comp.id] || comp.desc;
+  }, [lang]);
+
   return (
     <>
-      <App />
-      <DonationButton />
+      <App lang={lang} changeLang={changeLang} t={t} getDesc={getDesc} />
+      <DonationButton t={t} />
     </>
   );
 }
