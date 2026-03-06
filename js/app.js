@@ -331,6 +331,33 @@ function App() {
                 />
               </div>
 
+              {/* Cross-Platform Names */}
+              {window.CROSS_PLATFORM?.[comp.id] && (() => {
+                const cp = window.CROSS_PLATFORM[comp.id];
+                const rows = [
+                  { icon: "🌐", label: "Web",     value: cp.web },
+                  { icon: "🤖", label: "Android", value: cp.android },
+                  { icon: "🐦", label: "Flutter", value: cp.flutter },
+                  { icon: "⚛️", label: "React",   value: cp.react },
+                ].filter(r => r.value);
+                return (
+                  <div style={{ marginTop: 24, marginBottom: 24 }}>
+                    <div className="section-label">다른 플랫폼에서의 이름</div>
+                    <div className="cross-platform-table">
+                      {rows.map(r => (
+                        <div key={r.label} className="cp-row">
+                          <span className="cp-platform">
+                            <span className="cp-icon">{r.icon}</span>
+                            {r.label}
+                          </span>
+                          <span className="cp-value">{r.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
               {/* References */}
               {window.REFERENCES?.[comp.id]?.length > 0 && (
                 <div style={{ marginTop: 24 }}>
