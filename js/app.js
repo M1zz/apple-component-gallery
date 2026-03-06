@@ -331,6 +331,33 @@ function App() {
                 />
               </div>
 
+              {/* References */}
+              {window.REFERENCES?.[comp.id]?.length > 0 && (
+                <div style={{ marginTop: 24 }}>
+                  <div className="section-label">Apple Developer Documentation</div>
+                  <div className="ref-list">
+                    {window.REFERENCES[comp.id].map(ref => (
+                      <a
+                        key={ref.url}
+                        href={ref.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ref-link"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" style={{ flexShrink:0 }}>
+                          <circle cx="10" cy="10" r="8" stroke="#007AFF" strokeWidth="1.5"/>
+                          <path d="M10 6v4l2.5 2.5" stroke="#007AFF" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                        <span>{ref.label}</span>
+                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style={{ flexShrink:0, marginLeft:"auto", opacity:0.4 }}>
+                          <path d="M2 10L10 2M10 2H5M10 2v5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
             </div>
           </div>
         )}
