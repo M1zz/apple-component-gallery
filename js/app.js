@@ -4,6 +4,43 @@
  */
 
 const { useState, useMemo, useRef, useEffect, useCallback } = React;
+
+function DonationButton() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = (e) => { if (e.key === "Escape") setOpen(false); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  return (
+    <>
+      <button
+        className="donation-fab"
+        onClick={() => setOpen(true)}
+        title="후원하기"
+      >
+        ☕ 후원
+      </button>
+
+      {open && (
+        <div className="donation-overlay" onClick={() => setOpen(false)}>
+          <div className="donation-modal" onClick={e => e.stopPropagation()}>
+            <button className="donation-close" onClick={() => setOpen(false)}>✕</button>
+            <p className="donation-title">후원해주시면 감사해요 😊</p>
+            <img
+              src="assets/kakao-pay-qr.jpg"
+              alt="카카오페이 QR 코드"
+              className="donation-qr"
+            />
+            <p className="donation-name">카카오페이 · 이현호</p>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
 const { COMPONENTS, CATEGORIES, PLATFORMS, CAT_COLORS, PLAT_ICONS } = window.APP_DATA;
 
 function App() {
@@ -291,4 +328,13 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+function Root() {
+  return (
+    <>
+      <App />
+      <DonationButton />
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<Root />);
