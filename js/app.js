@@ -257,6 +257,17 @@ function App() {
               {/* Description */}
               <p className="detail-desc">{comp.desc}</p>
 
+              {/* Preview */}
+              {window.PREVIEWS?.[comp.id] && (
+                <div style={{ marginBottom: 24 }}>
+                  <div className="section-label">Preview</div>
+                  <div
+                    className="component-preview"
+                    dangerouslySetInnerHTML={{ __html: window.PREVIEWS[comp.id] }}
+                  />
+                </div>
+              )}
+
               {/* API Boxes */}
               <div className="api-boxes">
                 <div className="api-box swiftui">
