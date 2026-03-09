@@ -248,6 +248,13 @@ function App({ lang, changeLang, t, getDesc }) {
                   <div className="card-header">
                     <span className="card-emoji">{c.emoji}</span>
                     <span className="card-name">{c.name}</span>
+                    {window.PREVIEW_STYLES?.[c.id] && (
+                      <span className="style-count-badge" title={`${window.PREVIEW_STYLES[c.id].length} styles`}>
+                        {Array.from({ length: window.PREVIEW_STYLES[c.id].length }).map((_, i) => (
+                          <span key={i} className="style-dot" />
+                        ))}
+                      </span>
+                    )}
                   </div>
                   <div
                     className="card-api"

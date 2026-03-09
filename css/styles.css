@@ -842,6 +842,41 @@ html.dark .style-btn { background: #2C2C2E; border-color: #3A3A3C; color: #8E8E9
 html.dark .style-btn:hover { color: #0A84FF; border-color: #0A84FF; }
 html.dark .style-btn.active { background: #0A84FF; border-color: #0A84FF; color: white; }
 
+/* ── Style Count Badge (on cards) ── */
+.style-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(0,122,255,0.1);
+  border: 1px solid rgba(0,122,255,0.2);
+  border-radius: 10px;
+  padding: 3px 6px;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.comp-card:hover .style-count-badge,
+.comp-card.selected .style-count-badge {
+  background: rgba(0,122,255,0.18);
+}
+.style-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #007AFF;
+  opacity: 0.35;
+}
+.style-dot:first-child { opacity: 1; }
+html.dark .style-count-badge {
+  background: rgba(10,132,255,0.12);
+  border-color: rgba(10,132,255,0.25);
+}
+html.dark .style-dot { background: #0A84FF; }
+html.dark .comp-card:hover .style-count-badge,
+html.dark .comp-card.selected .style-count-badge {
+  background: rgba(10,132,255,0.22);
+}
+
 /* ── Component Preview ── */
 .component-preview {
   background: #F2F2F7;
