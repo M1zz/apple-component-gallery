@@ -816,6 +816,32 @@ body {
   }
 }
 
+/* ── Style Switcher ── */
+.style-switcher {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.style-btn {
+  padding: 4px 11px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-weight: 500;
+  background: #F2F2F7;
+  border: 1px solid #E5E5EA;
+  color: #8E8E93;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.style-btn:hover { color: #007AFF; border-color: #007AFF; }
+.style-btn.active { background: #007AFF; border-color: #007AFF; color: white; }
+html.dark .style-btn { background: #2C2C2E; border-color: #3A3A3C; color: #8E8E93; }
+html.dark .style-btn:hover { color: #0A84FF; border-color: #0A84FF; }
+html.dark .style-btn.active { background: #0A84FF; border-color: #0A84FF; color: white; }
+
 /* ── Component Preview ── */
 .component-preview {
   background: #F2F2F7;

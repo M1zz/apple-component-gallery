@@ -5,6 +5,29 @@
 
 const { useState, useMemo, useRef, useEffect, useCallback } = React;
 
+function StyleSwitcherPreview({ styles }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  return (
+    <div>
+      <div className="style-switcher">
+        {styles.map((s, i) => (
+          <button
+            key={s.label}
+            className={`style-btn ${i === activeIdx ? "active" : ""}`}
+            onClick={() => setActiveIdx(i)}
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
+      <div
+        className="component-preview"
+        dangerouslySetInnerHTML={{ __html: styles[activeIdx].html }}
+      />
+    </div>
+  );
+}
+
 function DonationButton({ t }) {
   const [open, setOpen] = useState(false);
 
@@ -283,13 +306,17 @@ function App({ lang, changeLang, t, getDesc }) {
               <p className="detail-desc">{getDesc(comp)}</p>
 
               {/* Preview */}
-              {window.PREVIEWS?.[comp.id] && (
+              {(window.PREVIEW_STYLES?.[comp.id] || window.PREVIEWS?.[comp.id]) && (
                 <div style={{ marginBottom: 24 }}>
                   <div className="section-label">{t("preview")}</div>
-                  <div
-                    className="component-preview"
-                    dangerouslySetInnerHTML={{ __html: window.PREVIEWS[comp.id] }}
-                  />
+                  {window.PREVIEW_STYLES?.[comp.id] ? (
+                    <StyleSwitcherPreview key={comp.id} styles={window.PREVIEW_STYLES[comp.id]} />
+                  ) : (
+                    <div
+                      className="component-preview"
+                      dangerouslySetInnerHTML={{ __html: window.PREVIEWS[comp.id] }}
+                    />
+                  )}
                 </div>
               )}
 
