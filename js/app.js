@@ -74,7 +74,14 @@ function App({ lang, changeLang, t, getDesc }) {
   const [selected, setSelected] = useState(null);
   const [copied, setCopied] = useState(false);
   const [dark, setDark] = useState(() => localStorage.getItem("theme") === "dark");
+  const [panelWidth, setPanelWidth] = useState(() => {
+    const saved = localStorage.getItem("panelWidth");
+    return saved ? parseInt(saved, 10) : 520;
+  });
   const detailRef = useRef(null);
+  const isResizing = useRef(false);
+  const resizeStartX = useRef(0);
+  const resizeStartW = useRef(0);
 
   useEffect(() => {
     if (dark) {
@@ -121,6 +128,37 @@ function App({ lang, changeLang, t, getDesc }) {
     base.forEach(c => { if (counts[c.cat] !== undefined) counts[c.cat]++; });
     return counts;
   }, [search, plat]);
+
+  /* ── Panel Resize ── */
+  const onResizeStart = useCallback((e) => {
+    isResizing.current = true;
+    resizeStartX.current = e.clientX;
+    resizeStartW.current = panelWidth;
+    document.body.style.cursor = "ew-resize";
+    document.body.style.userSelect = "none";
+  }, [panelWidth]);
+
+  useEffect(() => {
+    const onMove = (e) => {
+      if (!isResizing.current) return;
+      const delta = resizeStartX.current - e.clientX;
+      const next = Math.min(800, Math.max(320, resizeStartW.current + delta));
+      setPanelWidth(next);
+    };
+    const onUp = () => {
+      if (!isResizing.current) return;
+      isResizing.current = false;
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+      setPanelWidth(w => { localStorage.setItem("panelWidth", w); return w; });
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, []);
 
   /* ── Effects ── */
   useEffect(() => {
@@ -287,7 +325,8 @@ function App({ lang, changeLang, t, getDesc }) {
 
         {/* Detail Panel */}
         {comp && (
-          <div ref={detailRef} className="detail-panel slide-in">
+          <div ref={detailRef} className="detail-panel slide-in" style={{ width: panelWidth }}>
+            <div className="resize-handle" onMouseDown={onResizeStart} title="Drag to resize" />
             <div className="detail-inner">
 
               {/* Header */}

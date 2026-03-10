@@ -544,12 +544,41 @@ html.dark .comp-card.selected {
 
 /* ── Detail Panel ── */
 .detail-panel {
-  width: clamp(440px, 42vw, 600px);
+  flex-shrink: 0;
+  min-width: 320px;
+  max-width: 800px;
   border-left: 1px solid var(--border);
   overflow-y: auto;
   background: rgba(235,235,240,0.92);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
+  position: relative;
+}
+
+.resize-handle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  cursor: ew-resize;
+  z-index: 10;
+}
+.resize-handle::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 32px;
+  border-radius: 1px;
+  background: var(--border);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.resize-handle:hover::after {
+  opacity: 1;
 }
 
 :root.dark .detail-panel {
