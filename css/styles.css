@@ -544,7 +544,7 @@ html.dark .comp-card.selected {
 
 /* ── Detail Panel ── */
 .detail-panel {
-  width: clamp(340px, 30vw, 420px);
+  width: clamp(440px, 42vw, 600px);
   border-left: 1px solid var(--border);
   overflow-y: auto;
   background: rgba(235,235,240,0.92);
